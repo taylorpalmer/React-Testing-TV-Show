@@ -16,10 +16,8 @@ export default function App() {
   useEffect(() => {
     fetchShow().then((res) => {
       setShow(res.data);
-      // @ts-ignore
       setSeasons(formatSeasons(res.data._embedded.episodes));
     });
-    fetchShow();
   }, []);
 
   const handleSelect = (e) => {

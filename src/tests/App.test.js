@@ -27,6 +27,19 @@ const showData = {
     "http://www.tvmaze.com/episodes/553946/stranger-things-1x01-chapter-one-the-vanishing-of-will-byers",
 };
 
-test("App renders", () => {
-  render(<App />);
+test("App fetches and renders", async () => {
+  mockFetchShow.mockResolvedValueOnce(showData);
+
+  const { getByText, getAllByText, queryAllByText } = render(<App />);
+
+  await wait(() => {
+    getByText(/select a season/i);
+  });
+  expect(queryAllByText(/episode/i)).toHaveLength(0);
+
+  fireEvent.mouseDown(getByText(/select a season/i));
+  expect(getAllByText(/season/i)).toHaveLength(5);
+
+  fireEvent.mouseDown(getByText(/season 1/i));
+  expect(getAllByText(/episode/i)).toHaveLength(8);
 });
